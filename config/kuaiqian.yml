@@ -1,0 +1,9 @@
+test:
+  spid: '1001153656201'
+  key: 'ZUZNJB8MF63GA83J'
+development:
+  spid: '1001153656201'
+  key: 'ZUZNJB8MF63GA83J'
+production:
+  spid: '1001153656201'
+  key: 'ZUZNJB8MF63GA83J'
