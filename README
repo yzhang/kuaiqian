@@ -1,52 +1,58 @@
-Tenpay
+快钱
 ======
 
-A Ruby on Rails plugin for Tenpay (Online pay solution from Tencent).
+用于支持快钱(http://99bill.com/)支付网关的Rails插件。
+演示站点：http://kqdemo.zaituu.com
+演示代码：http://github.com/yzhang/kuaiqian_demo
 
-Install
+安装
 =======
 
-$ script/plugin install git://github.com/yzhang/tenpay.git
+$ script/plugin install git://github.com/yzhang/kuaiqian.git
 
-Charge
+集成
 =======
 
-1. After you installing the plugin, there should be a tenpay.yml 
-in your RAILS_ENV/config dir, you should edit that file and set
-your spid and key you got from Tencent.
+1. 安装完成后，插件会自动在你的应用的config目录创建一个kuaiqian.yml文件，默认是快钱提供的测试帐号（关于测试帐号的使用方法请参看测试章节）
+将kuaiqian.yml中的商户ID和密钥替换为快钱提供给你的真实ID和密钥然后进行下一步。
 
-2. To start a transaction, you will need create a new Tenpay::Request 
-instance, for example:
+2. 下面的代码会创建一笔新订单：
 
-  @request = Tenpay::Request.new('test product', # Product name
-                  1, # Order id, should be unique
-                  4500, # Product price, in cent
-                  'http://return', # Url user will return after the transaction, support Get/Post
-                  request.remote_ip, # Use for ip validation, ignored in development mode.
-                  'attach data') # Attach data, will be pass to the return url.
+  @request = Kuaiqian::Request.new('产品名称', # 产品名称
+                  1, # 订单ID，必须全局唯一
+                  Time.now.strftime("%Y%m%d%H%M%S"), # 订单生成时间，格式为20091104174132
+                  4500, # 订单金额，以分为单位
+                  'http://return', # 通知地址，用户支付成功后快钱会通过此地址通知商户支付结果
+                  '00', # 支付类型，00显示所有方式，10只显示银行卡方式，11只显示电话银行方式，12只显示快钱帐户支付方式，13只显示线下方式
+                  'attach') #自定义数据，会在返回URL中原样返回
   redirect_to @request.url
 
-This will redirect user to pay page.
+上面的代码会将用户重定向到快钱的支付页面。
 
-3. After user finishing the paying, the return url will be called, below
-code will demo if the request is legal and user finish the paying.
+3. 在用户完成支付后，快钱会调用你在支付请求中提供的返回URL：
 
-  @response = Tenpay::Response.new(params)
+  @response = Kuaiqian::Response.new(params)
   if @response.successful?
-    # paying is successful
+    # 支付成功
   else
-    # it's failed
+    # 支付失败
   end
   
-Query
-========
+注意，快钱可能会多次调用你的返回URL，并将结果展现给用户，因此你的代码要考虑多次执行后的输出对用户的有好度。
 
-If you want to query if user has paid for an order, use below interface:
+测试
+=======
 
-  @query = Tenpay::Query.new(1, # Order id
-                             Time.now) # Order date
-  @query.response.successful? # true => paid, false => unpaid.
-  
-It's all, feedbacks are always welcome, feel free to contact me at zhangyuanyi@gmail.com
+要使用快钱提供的测试ID，需要修改你的hosts文件，将快钱的域名指向测试服务器：
+
+218.242.247.5 www.99bill.com
+
+然后使用下面的帐号进行支付：
+
+用户名：kquser02@sina.com 
+密码：99bill
+
+----------------
+如果在使用中遇到任何的问题或者建议，欢迎和我联系： zhangyuanyi@gmail.com
 
 Copyright (c) 2009 Yuanyi Zhang, released under the MIT license
