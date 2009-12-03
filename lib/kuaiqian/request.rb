@@ -55,7 +55,7 @@ module Kuaiqian
       params.map do |param|
         value = send(param.underscore)
         value == '' ? nil : "#{param}=#{value}"
-      end.compact!.join('&')
+      end.compact.join('&')
     end
     
     def sign_msg
@@ -66,7 +66,7 @@ module Kuaiqian
       PARAMS.map do |param|
         value = send(param.underscore)
         value == '' ? nil : "#{param}=#{CGI.escape(value)}"
-      end.compact!.join('&')
+      end.compact.join('&')
     end
   end
 end

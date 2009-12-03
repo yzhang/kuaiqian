@@ -33,7 +33,7 @@ module Kuaiqian
       SIGN_PARAMS.map do |param|
         value = send(param.underscore)
         value == '' ? nil : "#{param}=#{value}" 
-      end.compact!.join('&')
+      end.compact.join('&')
     end
     
     def version;          @params[:version]; end
