@@ -23,7 +23,7 @@ module Kuaiqian
     end
     
     def url
-      "#{GATEWAY_URL}?#{params}&signMsg=#{sign_msg}"
+      "#{GATEWAY_URL}?#{html_params}&signMsg=#{sign_msg}"
     end
 
     def input_charset; '1'; end
@@ -51,8 +51,7 @@ module Kuaiqian
     def pid; ''; end
 
     def sign_params
-      params = PARAMS + ['key']
-      params.map do |param|
+      (PARAMS + ['key']).map do |param|
         value = send(param.underscore)
         value == '' ? nil : "#{param}=#{value}"
       end.compact.join('&')
@@ -62,7 +61,7 @@ module Kuaiqian
       Digest::MD5.hexdigest(sign_params).upcase
     end
     
-    def params
+    def html_params
       PARAMS.map do |param|
         value = send(param.underscore)
         value == '' ? nil : "#{param}=#{CGI.escape(value)}"

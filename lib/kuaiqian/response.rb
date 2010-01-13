@@ -15,7 +15,6 @@ module Kuaiqian
                   'CEB' => '中国光大银行', 'BOB' => '北京银行', 'CBHB' => '渤海银行', 
                   'BJRCB' => '北京农村商业银行', 'CNPY' => '中国银联'}
 
-    # merchantAcctId=1001153656201&version=v2.0&language=1&signType=1&payType=12&bankId=&orderId=20091103164410&orderAmount=100&orderTime=20091103164410&ext1=&ext2=&payAmount=100&dealId=5696344&bankDealId=&dealTime=20091104004452&payResult=10&errCode=&fee=1&signMsg=361A184B9157BBEAA3627B1B0D6412D6
     SIGN_PARAMS = %w(merchantAcctId version language signType  payType bankId orderId orderTime orderAmount dealId bankDealId dealTime payAmount fee ext1 ext2  payResult errCode key)
     def initialize(params)
       @params = params
