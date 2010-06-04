@@ -50,7 +50,7 @@ module Kuaiqian
     def fee;              @params[:fee]; end
     def attach;           @params[:ext1]; end
     def ext1;             @params[:ext1]; end
-    def ext2;             @params[:ext1]; end
+    def ext2;             @params[:ext2]; end
     def pay_result;       @params[:payResult]; end
     def err_code;         @params[:errCode]; end
     def sign_msg;         @params[:signMsg]; end
