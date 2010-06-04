@@ -2,34 +2,37 @@
 ======
 
 用于支持快钱(http://99bill.com/)支付网关的Rails插件。
-演示站点：http://kqdemo.zaituu.com
 演示代码：http://github.com/yzhang/kuaiqian_demo
-
-安装
-=======
-
-$ script/plugin install git://github.com/yzhang/kuaiqian.git
 
 集成
 =======
 
-1. 安装完成后，插件会自动在你的应用的config目录创建一个kuaiqian.yml文件，默认是快钱提供的测试帐号（关于测试帐号的使用方法请参看测试章节）
+1. 修改Gemfile:
+
+gem "kuaiqian"
+
+2. 生成配置文件：
+
+$ script/rails g kuaiqian
+
+这个命令会在你的应用的config目录创建一个kuaiqian.yml文件，默认是快钱提供的测试帐号（关于测试帐号的使用方法请参看测试章节）
 将kuaiqian.yml中的商户ID和密钥替换为快钱提供给你的真实ID和密钥然后进行下一步。
 
-2. 下面的代码会创建一笔新订单：
+3. 下面的代码会创建一笔新订单：
 
   @request = Kuaiqian::Request.new('产品名称', # 产品名称
                   1, # 订单ID，必须全局唯一
-                  Time.now.strftime("%Y%m%d%H%M%S"), # 订单生成时间，格式为20091104174132
+                  Time.now, # 订单生成时间，格式为20091104174132
                   4500, # 订单金额，以分为单位
                   'http://return', # 通知地址，用户支付成功后快钱会通过此地址通知商户支付结果
                   '00', # 支付类型，00显示所有方式，10只显示银行卡方式，11只显示电话银行方式，12只显示快钱帐户支付方式，13只显示线下方式
-                  'attach') #自定义数据，会在返回URL中原样返回
+                  'attach', #自定义数据，会在返回URL中原样返回
+                  'name') #订单支付人名称
   redirect_to @request.url
 
 上面的代码会将用户重定向到快钱的支付页面。
 
-3. 在用户完成支付后，快钱会调用你在支付请求中提供的返回URL：
+4. 在用户完成支付后，快钱会调用你在支付请求中提供的返回URL：
 
   @response = Kuaiqian::Response.new(params)
   if @response.successful?

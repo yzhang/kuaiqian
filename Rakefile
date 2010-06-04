@@ -1,11 +1,10 @@
 require 'rake'
-require 'spec/rake/spectask'
 require 'rake/rdoctask'
 
 desc 'Default: run specs.'
 task :default => :spec
 
-desc 'Generate documentation for the tenpay plugin.'
+desc 'Generate documentation for the kuaiqian plugin.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title    = 'Tenpay'
@@ -13,9 +12,18 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
- 
-desc 'Run the specs'
-Spec::Rake::SpecTask.new(:spec) do |t|
-  t.spec_opts = ['--colour --format progress --loadby mtime --reverse']
-  t.spec_files = FileList['spec/**/*_spec.rb']
+
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |s|
+    s.name = "kuaiqian"
+    s.summary = "A Ruby wrapper of Kauqian(快钱) Payment API"
+    s.email = "zhangyuanyi@gmail.com"
+    s.homepage = "http://github.com/yzhang/kuaiqian"
+    s.description = "A Ruby wrapper of Kauqian(快钱) Payment API"
+    s.authors = ["Yuanyi Zhang"]
+    s.files =  FileList["[A-Z]*", "{lib}/**/*", '.gitignore']
+  end
+rescue LoadError
+  puts "Jeweler, or one of its dependencies, is not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end

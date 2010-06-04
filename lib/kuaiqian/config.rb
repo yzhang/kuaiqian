@@ -1,19 +1,17 @@
 module Kuaiqian
   class Config
-    require 'yaml'
-
-    cattr_reader :spid, :key
-
-    def self.load_config
-      filename = "#{RAILS_ROOT}/config/kuaiqian.yml"
-      file = File.open(filename)
-      config = YAML.load(file)
-
-      @@spid     = config[RAILS_ENV]['spid']
-      @@key = config[RAILS_ENV]['key']
-      
-      unless @@spid && @@key
-        raise "Please configure your Tenpay settings in #{filename}."
+    class << self
+      def spid; config['spid'];  end
+      def key; config['key']; end
+    
+      def config
+        @@config ||= lambda do
+          require 'yaml'
+          filename = "#{Rails.root}/config/kuaiqian.yml"
+          file     = File.open(filename)
+          yaml     = YAML.load(file)
+          return yaml[Rails.env]
+        end.call
       end
     end
   end

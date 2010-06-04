@@ -8,7 +8,7 @@ module Kuaiqian
     PARAMS = %w(inputCharset bgUrl version language signType merchantAcctId payerName payerContactType payerContact orderId orderAmount orderTime productName productNum productId productDesc ext1 ext2 payType redoFlag pid)
     
     def initialize(product_name, order_id, order_time, total_fee, 
-                    return_url, pay_type='00', attach=nil)
+                    return_url, pay_type='00', attach=nil, payer_name='用户')
       @bank_type = 0
       @fee_type = 1
       
@@ -20,6 +20,8 @@ module Kuaiqian
       @pay_type = pay_type
       @return_url = return_url
       @ext1 = attach || ''
+      
+      @payer_name = payer_name
     end
     
     def url
@@ -33,7 +35,7 @@ module Kuaiqian
     def language; '1'; end
     def sign_type; '1'; end
     def merchant_acct_id; Kuaiqian::Config.spid; end
-    def payer_name; 'payerName'; end
+    def payer_name; @payer_name; end
     def payer_contact_type; '1'; end
     def payer_contact; ''; end
     def key; Kuaiqian::Config.key; end
